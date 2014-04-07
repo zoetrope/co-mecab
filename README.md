@@ -1,24 +1,25 @@
-Asynchronous japanese morphological analyser using MeCab
+co-mecab
 =============
 
 これは何？
 --------------
 非同期で MeCab で結果をパースする Node.js 用モジュールです。
+[mecab-async](https://github.com/hecomi/node-mecab-async)をベースに[co](https://github.com/visionmedia/co)で使えるようにしました。
 
 インストール
 --------------
-	$ npm install mecab-async
+	$ npm install co-mecab
 
 使い方
 --------------
-以下のようにコールバック経由で解析結果を取得します。
+以下のようにyieldを使って解析結果を取得します。
+実行するためには node 0.11 以上で --harmony オプションが必要です。
 
 ```javascript
-	var MeCab = new require('mecab-async')
-	  , mecab = new MeCab()
-	;
-	mecab.parse('いつもニコニコあなたの隣に這い寄る混沌ニャルラトホテプです！', function(err, result) {
-		if (err) throw err;
+	var mecab = new require('co-mecab');
+	var co = require('co');
+	co(function *() {
+	    var result = yield mecab.parse('いつもニコニコあなたの隣に這い寄る混沌ニャルラトホテプです！');
 		console.log(result);
 	});
 ```
@@ -41,11 +42,10 @@ Asynchronous japanese morphological analyser using MeCab
 わかち書きもできます。
 
 ```javascript
-	var MeCab = new require('mecab-async')
-	  , mecab = new MeCab()
-	;
-	mecab.wakachi('いつもニコニコあなたの隣に這い寄る混沌ニャルラトホテプです！', function(err, result) {
-		if (err) throw err;
+	var mecab = new require('co-mecab');
+	var co = require('co');
+	co(function *() {
+	    var result = yield mecab.wakach('いつもニコニコあなたの隣に這い寄る混沌ニャルラトホテプです！');
 		console.log(result);
 	});
 ```
@@ -65,8 +65,3 @@ Asynchronous japanese morphological analyser using MeCab
 	  'です',
 	  '！' ]
 
-同期版として parseSync および wakachiSync を使用することもできます。
-
-詳細
---------------
-その他詳細は Twitter:@hecomi へご質問いただくか、http://d.hatena.ne.jp/hecomi/ をご参照下さい。
